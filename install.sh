@@ -21,8 +21,13 @@ say "  ----------------------------------------------------"
 
 # Origen: si corremos desde un checkout (hay skill/ al lado), usamos eso. Si no,
 # bajamos el repo. Asi el mismo script sirve para probar y para instalar de verdad.
-AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -f "$AQUI/skill/SKILL.md" ]; then
+# OJO: con `curl | bash` BASH_SOURCE no existe y `set -u` aborta el script; hay que
+# preguntar antes de usarlo.
+AQUI=""
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+  AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || AQUI=""
+fi
+if [ -n "$AQUI" ] && [ -f "$AQUI/skill/SKILL.md" ]; then
   ORIGEN="$AQUI/skill"
   say "  origen: checkout local"
 else

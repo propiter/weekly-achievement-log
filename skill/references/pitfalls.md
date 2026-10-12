@@ -111,6 +111,30 @@ se cuele como propio. No es un detalle de estilo: en un weekly es quedarse con e
 merito de un companiero. Guarda `autor` en la captura y compara contra las
 identidades del duenio del registro.
 
+## No instales una copia del cuerpo del hook: instala un stub
+
+El hook instalado en cada repo **no debe contener la logica**. Si la contiene, tenes
+N copias de la misma logica, y editar una no alcanza a las otras.
+
+Paso de verdad: se instalaron los hooks, despues se le agrego el campo `autor` al
+cuerpo, y los repos siguieron capturando **sin autor durante horas**. Nadie reinstalo,
+porque nada avisaba que hacia falta.
+
+**Correcto:** el archivo instalado es un stub que lee el cuerpo canonico del repo del
+registro. Existe una sola copia, y editarla alcanza a todos los repos al instante.
+
+```sh
+#!/bin/sh
+set +e
+LOGROS_DIR="${LOGROS_DIR:-/ruta/al/repo-del-registro}"
+[ -f "$LOGROS_DIR/capture.sh" ] && . "$LOGROS_DIR/capture.sh"
+exit 0
+```
+
+El mismo razonamiento vale para la skill, para el instalador y para cualquier cosa que
+se copie a varios lugares: **una copia se desincroniza, y una copia desincronizada es
+peor que no tenerla.**
+
 ## Limpiar archivos de verificacion: mirar antes de borrar
 
 Los screenshots y snapshots que dejan las herramientas de navegacion caen en

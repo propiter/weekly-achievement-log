@@ -37,6 +37,9 @@ entregar el artefacto (eso es `artifact-craft`).
    gasta corridas cuando nada cambio.
 2. **El hook jamas bloquea un commit.** `set +e`, `exit 0` al final, y nada que
    pueda fallar hacia afuera. Con husky (`sh -e`) un error tumba el commit.
+   **Y el hook instalado es un STUB que lee el cuerpo canonico**, nunca una copia:
+   N copias del cuerpo significa que editar una no alcanza a las otras, y los repos
+   siguen capturando con la logica vieja sin que nada lo avise.
 3. **En repos con husky, escribir `.husky/post-commit`, NUNCA `.husky/_/`.**
    Dos razones: husky regenera `_` en cada `npm install` y pisa lo que pusiste
    ahi; y su shim `_/post-commit` hace `exit 0` cuando no hay hook de usuario,
